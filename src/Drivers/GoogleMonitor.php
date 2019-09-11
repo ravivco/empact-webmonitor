@@ -3,6 +3,7 @@
 namespace Empact\WebMonitor\Drivers;
 
 use Empact\WebMonitor\Clients\GoogleClient;
+use Empact\WebMonitor\Transformers\GoogleTransformer;
 
 class GoogleMonitor implements DriverInterface
 {
@@ -18,6 +19,8 @@ class GoogleMonitor implements DriverInterface
 
     public function search(string $keyword)
     {
-        return $this->google->getQuery($keyword);
+        $results = $this->google->getQuery($keyword);
+
+        return (new GoogleTransformer($results))->transform();
     }
 }

@@ -11,6 +11,11 @@ class BaseMonitor
     public const GOOGLE = 'google';
     public const VIGO = 'vigo';
 
+    /**
+     * The default monitors currently supported
+     *
+     * @var array
+     */
     public static $defaultMonitors = [
          self::TWITTER => TwitterMonitor::class,
          self::GOOGLE => GoogleMonitor::class,
@@ -18,6 +23,7 @@ class BaseMonitor
     ];
 
     /**
+     *
      * @var array
      */
     public static $selectedMonitors;
