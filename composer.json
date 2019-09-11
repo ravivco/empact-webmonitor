@@ -1,0 +1,32 @@
+{
+    "name": "empact/empact-web-monitor",
+    "description": "A web monitoring package",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "abraham/twitteroauth": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Empact\\WebMonitor\\":"src/"
+        }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.15",
+        "orchestra/testbench": "~3.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Empact\\WebMonitor\\EmpactServiceProvider"
+            ],
+            "aliases": {
+                "EmpactWebMonitor": "Empact\\WebMonitor\\Facades\\Empact"
+            }
+        }
+    },
+    "scripts": {
+        "format": [
+            "vendor/bin/php-cs-fixer fix"
+        ]
+    }
+}
