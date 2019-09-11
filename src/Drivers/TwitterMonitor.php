@@ -5,7 +5,7 @@ namespace Empact\WebMonitor\Drivers;
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterMonitor implements DriverInterface
-{   
+{
     /**
      * @var string
      */

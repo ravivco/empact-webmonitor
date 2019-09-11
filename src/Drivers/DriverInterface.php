@@ -5,7 +5,9 @@ namespace Empact\WebMonitor\Drivers;
 interface DriverInterface
 {
     /**
-     * @return array
+     * Search a given resource for the keyword
+     *
+     * @param string $keyword
      */
     public function search(string $keyword);
 }
