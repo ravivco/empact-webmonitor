@@ -2,9 +2,22 @@
 
 namespace Empact\WebMonitor\Drivers;
 
+use Empact\WebMonitor\Clients\GoogleClient;
+
 class GoogleMonitor implements DriverInterface
 {
-    public function __construct()
+    /**
+     * @var \Empact\WebMonitor\Clients\GoogleClient
+     */
+    protected $google;
+
+    public function __construct(GoogleClient $google)
     {
+        $this->google = $google;
+    }
+
+    public function search(string $keyword)
+    {
+        return $this->google->getQuery($keyword);
     }
 }

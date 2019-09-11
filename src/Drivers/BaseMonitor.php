@@ -2,6 +2,8 @@
 
 namespace Empact\WebMonitor\Drivers;
 
+use Illuminate\Support\Facades\App;
+
 class BaseMonitor
 {
     public $twitterMonitor;
@@ -12,12 +14,14 @@ class BaseMonitor
 
     public static $monitors = [
         self::TWITTER => TwitterMonitor::class,
-        self::GOOGLE => GoogleMonitor::class,
-        self::VIGO => VigoMonitor::class
+        // self::GOOGLE => GoogleMonitor::class,
+        // self::VIGO => VigoMonitor::class
     ];
 
     public function search(string $keyword)
     {
-        return (new TwitterMonitor)->search($keyword);
+        foreach (self::$monitors as $monitor) {
+            return App::make($monitor)->search($keyword);
+        }
     }
 }
