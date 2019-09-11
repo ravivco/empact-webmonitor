@@ -4,6 +4,8 @@ namespace Empact\WebMonitor\Drivers;
 
 class BaseMonitor
 {
+    public $twitterMonitor;
+
     public const TWITTER = 'twitter';
     public const GOOGLE = 'google';
     public const VIGO = 'vigo';
@@ -16,6 +18,6 @@ class BaseMonitor
 
     public function search(string $keyword)
     {
-        return (new TwitterMonitor())->search($keyword);
+        return (new TwitterMonitor)->search($keyword);
     }
 }

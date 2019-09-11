@@ -2,9 +2,7 @@
 
 namespace Empact\WebMonitor;
 
-use Abraham\TwitterOAuth\TwitterOAuth;
 use Empact\WebMonitor\Drivers\BaseMonitor;
-use Empact\WebMonitor\Drivers\TwitterMonitor;
 use Illuminate\Support\ServiceProvider;
 
 class EmpactServiceProvider extends ServiceProvider
@@ -22,17 +20,6 @@ class EmpactServiceProvider extends ServiceProvider
         
         $this->app->bind('empact-web-monitor', function () {
             return new BaseMonitor();
-        });
-
-        $this->app->bind(TwitterMonitor::class, function () {
-            $connection = new TwitterOAuth(
-                config('empact-web-monitor.twitter.consumer_key'),
-                config('empact-web-monitor.twitter.consumer_secret'),
-                config('empact-web-monitor.twitter.access_token'),
-                config('empact-web-monitor.twitter.access_token')
-            );
-
-            return new TwitterMonitor($connection);
         });
     }
 }
