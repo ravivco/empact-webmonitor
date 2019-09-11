@@ -20,7 +20,7 @@
                 "Empact\\WebMonitor\\EmpactServiceProvider"
             ],
             "aliases": {
-                "EmpactWebMonitor": "Empact\\WebMonitor\\Facades\\Empact"
+                "EmpactWebMonitor": "Empact\\WebMonitor\\Facades\\EmpactWebMonitor"
             }
         }
     },
