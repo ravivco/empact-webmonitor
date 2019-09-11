@@ -3,8 +3,11 @@
 namespace Empact\WebMonitor;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Empact\WebMonitor\Clients\GoogleClient;
 use Empact\WebMonitor\Drivers\BaseMonitor;
+use Empact\WebMonitor\Drivers\GoogleMonitor;
 use Empact\WebMonitor\Drivers\TwitterMonitor;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class EmpactServiceProvider extends ServiceProvider
@@ -24,7 +27,14 @@ class EmpactServiceProvider extends ServiceProvider
             return new BaseMonitor();
         });
 
-        $this->app->bind(TwitterMonitor::class, function () {
+        $this->bindTwitterMonitor();
+
+        $this->bindGoogleMonitor();
+    }
+
+    protected function bindTwitterMonitor()
+    {
+        return $this->app->bind(TwitterMonitor::class, function () {
             $connection = new TwitterOAuth(
                 config('empact-web-monitor.twitter.consumer_key'),
                 config('empact-web-monitor.twitter.consumer_secret'),
@@ -32,6 +42,18 @@ class EmpactServiceProvider extends ServiceProvider
                 config('empact-web-monitor.twitter.access_token_secret')
             );
             return new TwitterMonitor($connection);
+        });
+    }
+
+    protected function bindGoogleMonitor()
+    {
+        return $this->app->bind(GoogleMonitor::class, function () {
+            $connection = new GoogleClient(
+                config('empact-web-monitor.google.api_key'),
+                config('empact-web-monitor.google.search_engine_id'),
+                new Client()
+            );
+            return new GoogleMonitor($connection);
         });
     }
 }

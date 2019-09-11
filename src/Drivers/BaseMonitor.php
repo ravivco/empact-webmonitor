@@ -13,15 +13,19 @@ class BaseMonitor
     public const VIGO = 'vigo';
 
     public static $monitors = [
-        self::TWITTER => TwitterMonitor::class,
-        // self::GOOGLE => GoogleMonitor::class,
+         self::TWITTER => TwitterMonitor::class,
+         self::GOOGLE => GoogleMonitor::class,
         // self::VIGO => VigoMonitor::class
     ];
 
     public function search(string $keyword)
     {
-        foreach (self::$monitors as $monitor) {
-            return App::make($monitor)->search($keyword);
+        $results = [];
+
+        foreach (self::$monitors as $key => $monitor) {
+            $results[$key] = App::make($monitor)->search($keyword);
         }
+
+        return $results;
     }
 }

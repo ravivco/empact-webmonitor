@@ -6,5 +6,11 @@ return [
         'consumer_secret' => env('TWITTER_CONSUMER_SECRET'),
         'access_token' => env('TWITTER_ACCESS_TOKEN'),
         'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET')
+    ],
+    'google' => [
+        'api_key' => env('GOOGLE_API_KEY'),
+        'search_engine_id' => env('GOOGLE_SEARCH_ENGINE_ID')
+    ],
+    'vigo' => [
     ]
 ];
