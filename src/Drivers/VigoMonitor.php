@@ -3,6 +3,7 @@
 namespace Empact\WebMonitor\Drivers;
 
 use Empact\WebMonitor\Clients\VigoClient;
+use Empact\WebMonitor\Transformers\VigoTransformer;
 
 class VigoMonitor implements DriverInterface
 {
@@ -20,6 +21,6 @@ class VigoMonitor implements DriverInterface
     {
         $results = $this->vigo->getQuery($keyword);
 
-        return $results;
+        return (new VigoTransformer($results))->transform();
     }
 }

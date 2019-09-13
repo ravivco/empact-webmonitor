@@ -34,7 +34,7 @@ class VigoClient implements ClientInterface
         if (is_null($this->token)) {
             throw new Exception("Please provide a valid vigo token");
         }
-
+        
         $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
 
         return json_decode($result->getBody(), true);
@@ -44,7 +44,7 @@ class VigoClient implements ClientInterface
     {
         return http_build_query([
             'c2r' => $this->token,
-            'keyword' => urlencode($query)
+            'keyword' => $query
         ]);
     }
 }
