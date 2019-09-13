@@ -16,18 +16,19 @@ class VigoTransformer implements TransformerInterface
 
     public function transform()
     {
+        if (array_key_exists('error', $this->collection)) {
+            return $this->collection;
+        }
+
         $result = [];
 
-        foreach($this->collection as $item){
+        foreach ($this->collection as $item) {
             $result [] = [
-                'postId' => $item['postID'],
+                'url' => $item['link'],
                 'title' => $item['title'],
-                'media' => $item['media'],
-                'author' => $item['author'],
-                'date' => $item['date'],
-                'text' => $item['text'],
-                'link' => $item['link'],
-                'KeyWordName' => $item['keyword'] 
+                'body' => $item['text'],
+                'queryTime' => '',
+                'date' => $item['date']
             ];
         }
 

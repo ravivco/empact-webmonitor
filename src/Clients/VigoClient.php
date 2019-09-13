@@ -34,10 +34,20 @@ class VigoClient implements ClientInterface
         if (is_null($this->token)) {
             throw new Exception("Please provide a valid vigo token");
         }
-        
-        $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
 
-        return json_decode($result->getBody(), true);
+        try {
+            $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
+            return json_decode($result->getBody(), true);
+        } catch (Exception $e) {
+            $response = $e->getResponse();
+
+            return [
+                'error' => [
+                    'message' => $response->getReasonPhrase(),
+                    'code' => $response->getStatusCode()
+                ]
+            ];
+        }
     }
 
     protected function buildQuery($query)

@@ -17,11 +17,19 @@ class TwitterTransformer implements TransformerInterface
 
     public function transform()
     {
+        if (array_key_exists('error', $this->collection)) {
+            return $this->collection;
+        }
+
         $result = [];
 
         foreach ($this->collection->statuses as $status) {
             $result [] = [
-                  'body' => strip_tags($status->text)
+                  'url' => '',
+                  'title' => '',
+                  'body' => strip_tags($status->text),
+                  'queryTime' => '',
+                  'date' => ''
               ];
         }
 

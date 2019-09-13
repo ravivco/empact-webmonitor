@@ -6,7 +6,6 @@ interface ClientInterface
 {
     /**
      *
-     *
      * @param string
      */
     public function getQuery($query);

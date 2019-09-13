@@ -2,6 +2,7 @@
 
 namespace Empact\WebMonitor\Clients;
 
+use Exception;
 use GuzzleHttp\Client;
 
 class GoogleClient implements ClientInterface
@@ -37,21 +38,36 @@ class GoogleClient implements ClientInterface
 
     public function getQuery($query)
     {
-        if ($this->searchEngineId == '') {
-            throw new \Exception('You must specify a searchEngineId');
+        if (is_null($this->searchEngineId)) {
+            throw new Exception('You must specify a searchEngineId');
         }
 
-        $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
+        if (is_null($this->apiKey)) {
+            throw new Exception("You must specify a google API key");
+        }
 
-        return json_decode($result->getBody(), true);
+        try {
+            $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
+            return json_decode($result->getBody(), true);
+        } catch (Exception $e) {
+            $response = $e->getResponse();
+
+            return [
+                'error' => [
+                    'message' => $response->getReasonPhrase(),
+                    'code' => $response->getStatusCode()
+                ]
+            ];
+        }
     }
 
     protected function buildQuery($query)
     {
         return http_build_query([
                 'key' => $this->apiKey,
+                'count' => 30,
                 'cx' => $this->searchEngineId,
-                'q' => urlencode($query)
+                'q' => $query
             ]);
     }
 }

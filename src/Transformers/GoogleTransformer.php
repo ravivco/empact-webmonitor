@@ -10,25 +10,28 @@ class GoogleTransformer implements TransformerInterface
      */
     protected $collection;
 
-    protected $queryTime;
-
     public function __construct($collection)
     {
         $this->collection = $collection;
-
-        $this->queryTime = $this->queryTime();
     }
 
     public function transform()
     {
+        if (array_key_exists('error', $this->collection)) {
+            return $this->collection;
+        }
+
+        $queryTime = $this->queryTime();
+
         $result = [];
 
         foreach ($this->collection['items'] as $value) {
             $result [] = [
-                  'link' => $value['link'],
+                  'url' => $value['link'],
                   'title' => $value['title'],
                   'body' => strip_tags($value['snippet']),
-                  'queryTime' => $this->queryTime
+                  'queryTime' => $queryTime,
+                  'date' => '',
               ];
         }
 
