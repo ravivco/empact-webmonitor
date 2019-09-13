@@ -13,8 +13,6 @@ class TwitterTransformer implements TransformerInterface
     public function __construct($collection)
     {
         $this->collection = $collection;
-
-        // dd($this->collection->statuses);
     }
 
     public function transform()

@@ -4,9 +4,11 @@ namespace Empact\WebMonitor;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Empact\WebMonitor\Clients\GoogleClient;
+use Empact\WebMonitor\Clients\VigoClient;
 use Empact\WebMonitor\Drivers\BaseMonitor;
 use Empact\WebMonitor\Drivers\GoogleMonitor;
 use Empact\WebMonitor\Drivers\TwitterMonitor;
+use Empact\WebMonitor\Drivers\VigoMonitor;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,6 +32,8 @@ class EmpactServiceProvider extends ServiceProvider
         $this->bindTwitterMonitor();
 
         $this->bindGoogleMonitor();
+
+        $this->bindVigoMonitor();
     }
 
     protected function bindTwitterMonitor()
@@ -54,6 +58,17 @@ class EmpactServiceProvider extends ServiceProvider
                 new Client()
             );
             return new GoogleMonitor($connection);
+        });
+    }
+
+    protected function bindVigoMonitor()
+    {
+        return $this->app->bind(VigoMonitor::class, function () {
+            $connection = new VigoClient(
+                config('empact-web-monitor.vigo.token'),
+                new Client()
+            );
+            return new VigoMonitor($connection);
         });
     }
 }

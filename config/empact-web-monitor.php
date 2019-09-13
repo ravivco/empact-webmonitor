@@ -12,5 +12,6 @@ return [
         'search_engine_id' => env('GOOGLE_SEARCH_ENGINE_ID')
     ],
     'vigo' => [
+        'token' => env('VIGO_TOKEN')
     ]
 ];

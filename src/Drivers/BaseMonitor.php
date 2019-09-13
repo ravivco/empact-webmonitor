@@ -19,7 +19,7 @@ class BaseMonitor
     public static $defaultMonitors = [
          self::TWITTER => TwitterMonitor::class,
          self::GOOGLE => GoogleMonitor::class,
-        // self::VIGO => VigoMonitor::class
+         self::VIGO => VigoMonitor::class
     ];
 
     /**
