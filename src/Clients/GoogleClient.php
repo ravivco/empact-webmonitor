@@ -46,28 +46,39 @@ class GoogleClient implements ClientInterface
             throw new Exception("You must specify a google API key");
         }
 
-        try {
-            $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
-            return json_decode($result->getBody(), true);
-        } catch (Exception $e) {
-            $response = $e->getResponse();
+        $results = [];
 
-            return [
-                'error' => [
-                    'message' => $response->getReasonPhrase(),
-                    'code' => $response->getStatusCode()
-                ]
-            ];
+        $incrementBy = 10;
+
+        $count = config('empact-web-monitor.google.search_count') ?? 10;
+
+        for ($i = $incrementBy; $i <= $count; $i += $incrementBy) {
+            try {
+                $result = $this->client->get($this->baseUrl . $this->buildQuery($query, $i));
+                $body = json_decode($result->getBody(), true);
+                array_push($results, $body['items']);
+            } catch (Exception $e) {
+                $response = $e->getResponse();
+    
+                return [
+                    'error' => [
+                        'message' => $response->getReasonPhrase(),
+                        'code' => $response->getStatusCode()
+                    ]
+                ];
+            }
         }
+
+        return $results;
     }
 
-    protected function buildQuery($query)
+    protected function buildQuery($query, $startIndex)
     {
         return http_build_query([
                 'key' => $this->apiKey,
-                'count' => 30,
                 'cx' => $this->searchEngineId,
-                'q' => $query
+                'q' => $query,
+                'start' => $startIndex
             ]);
     }
 }

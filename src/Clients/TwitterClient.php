@@ -23,7 +23,7 @@ class TwitterClient implements ClientInterface
     {
         $this->ensureConfigValuesArePresent();
 
-        $result = $this->twitterOAuth->get('/search/tweets', ['q' => urlencode($query), 'count'=> 50]);
+        $result = $this->twitterOAuth->get('/search/tweets', ['q' => urlencode($query), 'count'=> 50, 'include_entities' => true]);
 
         $statusCode = $this->twitterOAuth->getLastHttpCode();
 

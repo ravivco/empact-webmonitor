@@ -25,7 +25,7 @@ class TwitterTransformer implements TransformerInterface
 
         foreach ($this->collection->statuses as $status) {
             $result [] = [
-                  'url' => '',
+                  'url' => $status->entities->urls['url'] ?? '',
                   'title' => '',
                   'body' => strip_tags($status->text),
                   'queryTime' => '',

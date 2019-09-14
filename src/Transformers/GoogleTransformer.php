@@ -21,18 +21,18 @@ class GoogleTransformer implements TransformerInterface
             return $this->collection;
         }
 
-        $queryTime = $this->queryTime();
-
         $result = [];
 
-        foreach ($this->collection['items'] as $value) {
-            $result [] = [
-                  'url' => $value['link'],
-                  'title' => $value['title'],
-                  'body' => strip_tags($value['snippet']),
-                  'queryTime' => $queryTime,
-                  'date' => '',
-              ];
+        foreach ($this->collection as $value) {
+            foreach ($value as $val) {
+                $result [] = [
+                    'url' => $val['link'],
+                    'title' => $val['title'],
+                    'body' => strip_tags($val['snippet']),
+                    'queryTime' => '',
+                    'date' => '',
+                ];
+            }
         }
 
         return $result;
