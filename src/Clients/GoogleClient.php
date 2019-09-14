@@ -52,9 +52,9 @@ class GoogleClient implements ClientInterface
 
         $searchCount = config('empact-web-monitor.google.search_count');
 
-        for ($i = $incrementBy; $i <= $searchCount; $i += $incrementBy) {
+        for ($i = 1, $startIndex = $incrementBy; $i <= $searchCount; $i++, $startIndex += $incrementBy) {
             try {
-                $result = $this->client->get($this->baseUrl . $this->buildQuery($query, $i));
+                $result = $this->client->get($this->baseUrl . $this->buildQuery($query, $startIndex));
                 $body = json_decode($result->getBody(), true);
                 array_push($results, $body['items']);
             } catch (Exception $e) {
