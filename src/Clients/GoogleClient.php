@@ -50,16 +50,15 @@ class GoogleClient implements ClientInterface
 
         $incrementBy = 10;
 
-        $count = config('empact-web-monitor.google.search_count') ?? 10;
+        $searchCount = config('empact-web-monitor.google.search_count');
 
-        for ($i = $incrementBy; $i <= $count; $i += $incrementBy) {
+        for ($i = $incrementBy; $i <= $searchCount; $i += $incrementBy) {
             try {
                 $result = $this->client->get($this->baseUrl . $this->buildQuery($query, $i));
                 $body = json_decode($result->getBody(), true);
                 array_push($results, $body['items']);
             } catch (Exception $e) {
                 $response = $e->getResponse();
-    
                 return [
                     'error' => [
                         'message' => $response->getReasonPhrase(),

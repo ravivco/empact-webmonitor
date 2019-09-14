@@ -10,7 +10,7 @@ return [
     'google' => [
         'api_key' => env('GOOGLE_API_KEY'),
         'search_engine_id' => env('GOOGLE_SEARCH_ENGINE_ID'),
-        'search_count' => env('GOOGLE_SEARCH_COUNT')
+        'search_count' => 10
     ],
     'vigo' => [
         'token' => env('VIGO_TOKEN')
