@@ -3,20 +3,16 @@ a Laravel package to fetch data from resources monitoring the web based on keywo
 
 ## Installation
 
-To install this package in a laravel project, since it isn't hosted anywhere currently, you'll have to clone the repo and add the relative path to
-the `composer.json` file in your laravel project. So add the following code to the `composer.json` file in the laravel project you want to use the
-package in:
+To install this package update `composer.json` and add a repository:
 
 ```bash
    "repositories": [
         {
-            "type": "path",
-            "url" : "../empact-web-monitor"
+            "type": "vcs",
+            "url" : "https://github.com/ravivco/empact-web-monitor.git"
         }
     ]
 ```
-The `url` is the relative path to the folder where you cloned the repo.
-
 Next, we install the package using composer, run the following command:
 
 ```bash
@@ -68,6 +64,7 @@ VIGO_TOKEN=xxxxx
 ## Usage
 To crawl all the supported monitors (twitter, google and vigo) for a particular keyword, you can use the `Empact\WebMonitor\Drivers\BaseMonitor` class or the Facade at `Empact\WebMonitor\Facades\EmpactWebMonitor`and
 call search on it passing in the keyword you want to search for. So for example, I have a `SearchController.php` file
+
 ```php
 <?php
 
@@ -83,7 +80,48 @@ class SearchController extends Controller
      
      $results = EmpactWebMonitor::search($keyword);
      
-     return response()->json(['data'=>$results]);
+     return response()->json(['data'=> $results]);
+}
+
+```
+To crawl only selected monitors, pass an array consisting of the monitors you would like to crawl to the `use()` method. For example, I only want to crawl Google and Vigo
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Empact\WebMonitor\Facades\EmpactWebMonitor;
+
+class SearchController extends Controller
+{
+   public function search()
+   {
+     $keyword = 'Burna Boy';
+     
+     $results = EmpactWebMonitor::use(['google', 'vigo'])->search($keyword);
+     
+     return response()->json(['data'=> $results]);
+}
+
+```
+
+To fetch all the supported Keywords from Vigo, use the `getKeywords()` method on the `Empact\WebMonitor\Facades\EmpactWebMonitor` Facade.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Empact\WebMonitor\Facades\EmpactWebMonitor;
+
+class SearchController extends Controller
+{
+   public function getKeywords()
+   {
+     $keywords = EmpactWebMonitor::getKeywords();
+     
+     return response()->json(['data'=> $keywords]);
 }
 ```
 
