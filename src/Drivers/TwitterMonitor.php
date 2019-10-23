@@ -10,16 +10,16 @@ class TwitterMonitor implements DriverInterface
     /**
      * @var \Empact\WebMonitor\Clients\TwitterClient
      */
-    protected $twitter;
+    protected $twitterClient;
 
-    public function __construct(TwitterClient $twitter)
+    public function __construct(TwitterClient $twitterClient)
     {
-        $this->twitter = $twitter;
+        $this->twitterClient = $twitterClient;
     }
 
     public function search(string $keyword)
     {
-        $results = $this->twitter->getQuery($keyword);
+        $results = $this->twitterClient->getQuery($keyword);
 
         return (new TwitterTransformer($results))->transform();
     }
