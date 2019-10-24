@@ -78,4 +78,9 @@ class BaseMonitor
 
         return $results;
     }
+
+    public function getKeywords()
+    {
+        return App::make(self::$defaultMonitors[self::VIGO])->getKeywords();
+    }
 }

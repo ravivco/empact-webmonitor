@@ -10,17 +10,22 @@ class VigoMonitor implements DriverInterface
     /**
      * @var Empact\WebMonitor\Clients\VigoClient
      */
-    protected $vigo;
+    protected $vigoClient;
 
-    public function __construct(VigoClient $vigo)
+    public function __construct(VigoClient $vigoClient)
     {
-        $this->vigo = $vigo;
+        $this->vigoClient = $vigoClient;
     }
 
     public function search(string $keyword)
     {
-        $results = $this->vigo->getQuery($keyword);
+        $results = $this->vigoClient->getQuery($keyword);
 
         return (new VigoTransformer($results))->transform();
+    }
+
+    public function getKeywords()
+    {
+        return $this->vigoClient->getKeywords();
     }
 }

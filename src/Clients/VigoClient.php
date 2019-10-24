@@ -20,7 +20,12 @@ class VigoClient implements ClientInterface
     /**
      * @var string
      */
-    protected $baseUrl = 'http://192.118.60.25/VigoRecent/api/Posts/RecentKW?id=633590419&';
+    protected $searchKeywordsUrl = 'http://192.118.60.25/VigoRecent/api/Posts/RecentKW?id=633590419&';
+
+    /**
+     * @var string
+     */
+    protected $getKeywordsUrl = 'http://192.118.60.25/VigoRecent/api/Posts/GetKeywords?c2r=h3B419qtAaZ1dVOmvyXKhNfbrOK9JCkULc1omlooSIQ_EQU_';
 
     public function __construct($token, Client $client)
     {
@@ -36,11 +41,27 @@ class VigoClient implements ClientInterface
         }
 
         try {
-            $result = $this->client->get($this->baseUrl . $this->buildQuery($query));
+            $result = $this->client->get($this->searchKeywordsUrl . $this->buildQuery($query));
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
             $response = $e->getResponse();
 
+            return [
+                'error' => [
+                    'message' => $response->getReasonPhrase(),
+                    'code' => $response->getStatusCode()
+                ]
+            ];
+        }
+    }
+
+    public function getKeywords()
+    {
+        try {
+            $result = $this->client->get($this->getKeywordsUrl);
+            return json_decode($result->getBody(), true);
+        } catch (Exception $e) {
+            $response = $e->getResponse();
             return [
                 'error' => [
                     'message' => $response->getReasonPhrase(),

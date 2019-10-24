@@ -10,16 +10,16 @@ class GoogleMonitor implements DriverInterface
     /**
      * @var \Empact\WebMonitor\Clients\GoogleClient
      */
-    protected $google;
+    protected $googleClient;
 
-    public function __construct(GoogleClient $google)
+    public function __construct(GoogleClient $googleClient)
     {
-        $this->google = $google;
+        $this->googleClient = $googleClient;
     }
 
     public function search(string $keyword)
     {
-        $results = $this->google->getQuery($keyword);
+        $results = $this->googleClient->getQuery($keyword);
 
         return (new GoogleTransformer($results))->transform();
     }
