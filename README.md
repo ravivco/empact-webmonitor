@@ -9,7 +9,7 @@ To install this package update `composer.json` and add a repository:
    "repositories": [
         {
             "type": "vcs",
-            "url" : "https://github.com/ravivco/empact-web-monitor.git"
+            "url" : "https://github.com/ravivco/empact-webmonitor.git"
         }
     ]
 ```
