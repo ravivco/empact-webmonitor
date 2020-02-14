@@ -17,9 +17,9 @@ class BaseMonitor
      * @var array
      */
     public static $defaultMonitors = [
-         self::TWITTER => TwitterMonitor::class,
-         self::GOOGLE => GoogleMonitor::class,
-         self::VIGO => VigoMonitor::class
+        self::TWITTER => TwitterMonitor::class,
+        self::GOOGLE => GoogleMonitor::class,
+        self::VIGO => VigoMonitor::class
     ];
 
     /**
@@ -50,36 +50,44 @@ class BaseMonitor
         })->toArray();
     }
 
-    public function search(string $keyword)
+    /**
+     * Search Default/Selected monitors by give query params (array)
+     *
+     * @param array $query
+     * @return array
+     */
+    public function search(array $query)
     {
         return empty(self::$selectedMonitors)
-             ? $this->searchDefaultMonitors($keyword)
-             : $this->searchSelectedMonitors($keyword);
+            ? $this->searchDefaultMonitors($query)
+            : $this->searchSelectedMonitors($query);
     }
 
-    protected function searchDefaultMonitors($keyword)
+    protected function searchDefaultMonitors(array $query)
     {
         $results = [];
 
         foreach (self::$defaultMonitors as $key => $monitor) {
-            $results[$key] = App::make($monitor)->search($keyword);
+            $api_monitor = App::make($monitor)->init($query);
+            $results[$key] = $api_monitor->search();
         }
 
         return $results;
     }
 
-    protected function searchSelectedMonitors($keyword)
+    protected function searchSelectedMonitors(array $query)
     {
         $results = [];
 
         foreach (self::$selectedMonitors as $monitor) {
-            $results[$monitor] = App::make(self::$defaultMonitors[$monitor])->search($keyword);
+            $api_monitor = App::make(self::$defaultMonitors[$monitor])->init($query);
+            $results[$monitor] = $api_monitor->search();
         }
 
         return $results;
     }
 
-    public function getKeywords()
+    public function getApiKeywords()
     {
         return App::make(self::$defaultMonitors[self::VIGO])->getKeywords();
     }

@@ -17,7 +17,12 @@ class GoogleMonitor implements DriverInterface
         $this->googleClient = $googleClient;
     }
 
-    public function search(string $keyword)
+    public function init(array $query)
+    {
+        $this->googleClient->init($query);
+    }
+
+    public function search(string $keyword = null)
     {
         $results = $this->googleClient->getQuery($keyword);
 

@@ -5,27 +5,20 @@ namespace Empact\WebMonitor\Clients;
 use Exception;
 use GuzzleHttp\Client;
 
-class VigoClient implements ClientInterface
+class VigoClient extends BaseClient implements ClientInterface
 {
-    /**
-     * @var GuzzleHttp\Client
-     */
-    protected $client;
 
     /**
      * @var string
      */
-    protected $token;
-
-    /**
-     * @var string
-     */
-    protected $searchKeywordsUrl = 'http://192.118.60.25/VigoRecent/api/Posts/RecentKW?id=633590419&';
+    protected $api_url = 'http://192.118.60.25/VigoRecent/api/Posts/RecentKW';
 
     /**
      * @var string
      */
     protected $getKeywordsUrl = 'http://192.118.60.25/VigoRecent/api/Posts/GetKeywords?c2r=h3B419qtAaZ1dVOmvyXKhNfbrOK9JCkULc1omlooSIQ_EQU_';
+
+    public $allowed_query_params = ['keyword', 'start_index'];
 
     public function __construct($token, Client $client)
     {
@@ -34,14 +27,14 @@ class VigoClient implements ClientInterface
         $this->client = $client;
     }
 
-    public function getQuery($query)
+    public function getQuery()
     {
         if (is_null($this->token)) {
             throw new Exception("Please provide a valid vigo token");
         }
 
         try {
-            $result = $this->client->get($this->searchKeywordsUrl . $this->buildQuery($query));
+            $result = $this->client->get($this->searchKeywordsUrl . $this->buildQuery());
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
             $response = $e->getResponse();
@@ -71,11 +64,12 @@ class VigoClient implements ClientInterface
         }
     }
 
-    protected function buildQuery($query)
+    protected function buildQuery()
     {
         return http_build_query([
             'c2r' => $this->token,
-            'keyword' => $query
+            'keyword' => $this->getQueryParam('keyword'),
+            'id' => $this->getQueryParam('start_index')
         ]);
     }
 }

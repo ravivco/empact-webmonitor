@@ -5,14 +5,16 @@ namespace Empact\WebMonitor\Clients;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Exception;
 
-class TwitterClient implements ClientInterface
+class TwitterClient extends BaseClient implements ClientInterface
 {
     public const SUCCESS = 200;
-    
+
     /**
      * @var \Abraham\TwitterOauth\TwitterOauth
      */
     protected $twitterOAuth;
+
+    public $allowed_query_params = ['keyword'];
 
     public function __construct(TwitterOAuth $twitterOAuth)
     {
@@ -23,7 +25,7 @@ class TwitterClient implements ClientInterface
     {
         $this->ensureConfigValuesArePresent();
 
-        $result = $this->twitterOAuth->get('/search/tweets', ['q' => urlencode($query), 'count'=> 50, 'include_entities' => true]);
+        $result = $this->twitterOAuth->get('/search/tweets', $this->buildQuery());
 
         $statusCode = $this->twitterOAuth->getLastHttpCode();
 
@@ -54,5 +56,14 @@ class TwitterClient implements ClientInterface
             }
         }
         return;
+    }
+
+    protected function buildQuery()
+    {
+        return [
+            'count'=> 50,
+            'include_entities' => true,
+            'q' => $this->getQueryParam('keyword')
+        ];
     }
 }

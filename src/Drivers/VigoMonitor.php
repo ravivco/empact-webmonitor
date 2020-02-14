@@ -17,9 +17,14 @@ class VigoMonitor implements DriverInterface
         $this->vigoClient = $vigoClient;
     }
 
-    public function search(string $keyword)
+    public function init(array $query)
     {
-        $results = $this->vigoClient->getQuery($keyword);
+        $this->vigoClient->init($query);
+    }
+
+    public function search()
+    {
+        $results = $this->vigoClient->getQuery();
 
         return (new VigoTransformer($results))->transform();
     }

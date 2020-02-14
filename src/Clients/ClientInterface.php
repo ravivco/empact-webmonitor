@@ -4,9 +4,5 @@ namespace Empact\WebMonitor\Clients;
 
 interface ClientInterface
 {
-    /**
-     *
-     * @param string
-     */
-    public function getQuery($query);
+    public function getQuery();
 }
