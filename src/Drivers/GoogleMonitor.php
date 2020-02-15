@@ -20,6 +20,8 @@ class GoogleMonitor implements DriverInterface
     public function init(array $query)
     {
         $this->googleClient->init($query);
+
+        return $this;
     }
 
     public function search(string $keyword = null)

@@ -20,6 +20,8 @@ class TwitterMonitor implements DriverInterface
     public function init(array $query)
     {
         $this->twitterClient->init($query);
+
+        return $this;
     }
 
     public function search(string $keyword = null)

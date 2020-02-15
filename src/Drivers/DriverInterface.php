@@ -8,7 +8,7 @@ interface DriverInterface
      * Initiate query params
      *
      * @param array $query
-     * @return mixed
+     * @return $this
      */
     public function init(array $query);
 

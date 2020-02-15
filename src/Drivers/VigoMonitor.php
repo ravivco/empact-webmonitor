@@ -20,6 +20,8 @@ class VigoMonitor implements DriverInterface
     public function init(array $query)
     {
         $this->vigoClient->init($query);
+
+        return $this;
     }
 
     public function search()
