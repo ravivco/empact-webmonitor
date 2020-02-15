@@ -34,7 +34,7 @@ class VigoClient extends BaseClient implements ClientInterface
         }
 
         try {
-            $result = $this->client->get($this->searchKeywordsUrl . $this->buildQuery());
+            $result = $this->client->get($this->api_url . $this->buildQuery());
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
             $response = $e->getResponse();

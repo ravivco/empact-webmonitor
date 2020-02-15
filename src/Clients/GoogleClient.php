@@ -38,7 +38,7 @@ class GoogleClient extends BaseClient implements ClientInterface
         $this->client = $client;
     }
 
-    public function getQuery($query)
+    public function getQuery()
     {
         if (is_null($this->searchEngineId)) {
             throw new Exception('You must specify a searchEngineId');
@@ -56,7 +56,7 @@ class GoogleClient extends BaseClient implements ClientInterface
 
         for ($i = 1, $startIndex = $incrementBy; $i <= $searchCount; $i++, $startIndex += $incrementBy) {
             try {
-                $result = $this->client->get($this->baseUrl . $this->buildQuery());
+                $result = $this->client->get($this->api_url . $this->buildQuery());
                 $body = json_decode($result->getBody(), true);
                 array_push($results, $body['items']);
             } catch (Exception $e) {

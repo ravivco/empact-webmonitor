@@ -21,7 +21,7 @@ class TwitterClient extends BaseClient implements ClientInterface
         $this->twitterOAuth = $twitterOAuth;
     }
 
-    public function getQuery($query)
+    public function getQuery()
     {
         $this->ensureConfigValuesArePresent();
 
