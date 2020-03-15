@@ -8,23 +8,47 @@ use GuzzleHttp\Client;
 class VigoClient extends BaseClient implements ClientInterface
 {
 
-    /**
-     * @var string
-     */
-    protected $api_url = 'http://192.118.60.25/VigoRecent/api/Posts/RecentKW?';
+    protected $results_type_options = [
+        'All' => 'RecentAll?',
+        'Brand' => 'Recent?',
+        'Keywords' => 'GetKeywords?'
+    ];
 
     /**
      * @var string
      */
-    protected $getKeywordsUrl = 'http://192.118.60.25/VigoRecent/api/Posts/GetKeywords?c2r=h3B419qtAaZ1dVOmvyXKhNfbrOK9JCkULc1omlooSIQ_EQU_';
+    protected $api_base_url = 'http://192.118.60.25/VigoRecent/api/Posts/';
 
-    public $allowed_query_params = ['keyword', 'start_index'];
+    /**
+     * @var string
+     */
+    protected $api_url;
+
+    public $allowed_query_params = ['c2r', 'keyword', 'start_index', 'results_type'];
 
     public function __construct($token, Client $client)
     {
         $this->token = $token;
 
         $this->client = $client;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResultsType(): string
+    {
+        $type = $this->getQueryParam('results_type') ?: 'All';
+
+        return $this->results_type_options[$type];
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl(): string
+    {
+        return $this->api_base_url.$this->getResultsType();
     }
 
     public function getQuery()
@@ -34,7 +58,7 @@ class VigoClient extends BaseClient implements ClientInterface
         }
 
         try {
-            $result = $this->client->get($this->api_url . $this->buildQuery());
+            $result = $this->client->get($this->getApiUrl() . $this->buildQuery());
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
             $response = $e->getResponse();
@@ -51,7 +75,7 @@ class VigoClient extends BaseClient implements ClientInterface
     public function getKeywords()
     {
         try {
-            $result = $this->client->get($this->getKeywordsUrl);
+            $result = $this->client->get($this->getApiUrl() . $this->buildQuery());
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
             $response = $e->getResponse();
@@ -67,7 +91,7 @@ class VigoClient extends BaseClient implements ClientInterface
     protected function buildQuery()
     {
         return http_build_query([
-            'c2r' => $this->token,
+            'c2r' => $this->getQueryParam('c2r') ?: $this->token,
             'keyword' => $this->getQueryParam('keyword'),
             'id' => $this->getQueryParam('start_index')
         ]);

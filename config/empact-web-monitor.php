@@ -13,6 +13,16 @@ return [
         'search_count' => 3
     ],
     'vigo' => [
-        'token' => env('VIGO_TOKEN')
+        'token' => env('VIGO_TOKEN'),
+        'media_map' => [
+            'Internet'  => 1, // Regular & News
+            'Blog'      => 2, // Blogs
+            'Forum'     => 3, // Forums and discussions
+            'Twitter'   => 5, // Twitter
+            'Facebook'  => 6, // Facebook
+            'Instagram' => 7, // Instagram
+            'TB'        => 8, // Talk back
+            'Youtube'   => 9, // Youtube
+        ]
     ]
 ];
