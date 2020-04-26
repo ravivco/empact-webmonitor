@@ -17,7 +17,7 @@ class VigoClient extends BaseClient implements ClientInterface
     /**
      * @var string
      */
-    protected $api_base_url = 'http://api.ifat.com/VigoRecent/api/Posts/';
+    protected $api_base_url = 'https://api.ifat.com/VigoRecent/api/Posts/';
 
     /**
      * @var string
