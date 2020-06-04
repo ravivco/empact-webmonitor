@@ -42,8 +42,6 @@ class VigoTransformer implements TransformerInterface
 
     protected function generateQueryText(array $item)
     {
-        return isset($item['keyword']) && isset($item['highlights']) ?
-            ($item['keyword'] != $item['highlights'] ? $item['keyword']." - ".$item['highlights'] : $item['keyword']) :
-            (isset($item['highlights']) ? $item['highlights'] : null);
+        return isset($item['highlights']) ? $item['highlights'] : (isset($item['keyword']) ? $item['keyword'] : null);
     }
 }
