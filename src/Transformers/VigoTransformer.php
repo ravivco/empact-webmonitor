@@ -29,6 +29,7 @@ class VigoTransformer implements TransformerInterface
                 'url' => isset($item['link']) ? $item['link'] : null,
                 'title' => isset($item['title']) ? $item['title'] : null,
                 'body' => isset($item['text']) ? $item['text'] : null,
+                'author' => isset($item['author']) ? $item['author'] : null,
                 'date' => isset($item['date']) ? $item['date'] : null,
                 'query_text' => $this->generateQueryText($item),
                 'query_time' => '',
@@ -42,6 +43,6 @@ class VigoTransformer implements TransformerInterface
 
     protected function generateQueryText(array $item)
     {
-        return isset($item['highlights']) ? $item['highlights'] : (isset($item['keyword']) ? $item['keyword'] : null);
+        return isset($item['keyword']) ? $item['keyword'] : (isset($item['highlights']) ? $item['highlights'] : null);
     }
 }
