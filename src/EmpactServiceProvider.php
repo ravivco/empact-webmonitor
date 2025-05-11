@@ -3,9 +3,11 @@
 namespace Empact\WebMonitor;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Empact\WebMonitor\Clients\AiClient;
 use Empact\WebMonitor\Clients\GoogleClient;
 use Empact\WebMonitor\Clients\TwitterClient;
 use Empact\WebMonitor\Clients\VigoClient;
+use Empact\WebMonitor\Drivers\AiMonitor;
 use Empact\WebMonitor\Drivers\BaseMonitor;
 use Empact\WebMonitor\Drivers\GoogleMonitor;
 use Empact\WebMonitor\Drivers\TwitterMonitor;
@@ -25,7 +27,7 @@ class EmpactServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/empact-web-monitor.php', 'empact-web-monitor');
-        
+
         $this->app->bind('empact-web-monitor', function () {
             return new BaseMonitor();
         });
@@ -35,6 +37,8 @@ class EmpactServiceProvider extends ServiceProvider
         $this->bindGoogleMonitor();
 
         $this->bindVigoMonitor();
+
+        $this->bindAiMonitor();
     }
 
     protected function bindTwitterMonitor()
@@ -47,7 +51,7 @@ class EmpactServiceProvider extends ServiceProvider
                 config('empact-web-monitor.twitter.access_token_secret')
             );
             $connection = new TwitterClient($twitterOauth);
-            
+
             return new TwitterMonitor($connection);
         });
     }
@@ -72,6 +76,16 @@ class EmpactServiceProvider extends ServiceProvider
                 new Client()
             );
             return new VigoMonitor($connection);
+        });
+    }
+    protected function bindAiMonitor()
+    {
+        return $this->app->bind(AiMonitor::class, function () {
+            $connection = new AiClient(
+                config('empact-web-monitor.ai.bearer_token'),
+                new Client()
+            );
+            return new AiMonitor($connection);
         });
     }
 }

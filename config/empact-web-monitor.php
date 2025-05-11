@@ -24,5 +24,9 @@ return [
             'TB'        => 8, // Talk back
             'Youtube'   => 9, // Youtube
         ]
+    ],
+    'ai' => [
+        'api_endpoint' => env('AI_API_ENDPOINT'),
+        'bearer_token' => env('AI_API_BEARER_TOKEN'),
     ]
 ];

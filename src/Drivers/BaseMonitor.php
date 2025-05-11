@@ -10,6 +10,7 @@ class BaseMonitor
     public const TWITTER = 'twitter';
     public const GOOGLE = 'google';
     public const VIGO = 'vigo';
+    public const EMPACT_AI = 'ai';
 
     /**
      * The default monitors currently supported
@@ -19,7 +20,8 @@ class BaseMonitor
     public static $defaultMonitors = [
         self::TWITTER => TwitterMonitor::class,
         self::GOOGLE => GoogleMonitor::class,
-        self::VIGO => VigoMonitor::class
+        self::VIGO => VigoMonitor::class,
+        self::EMPACT_AI => AiMonitor::class
     ];
 
     /**
