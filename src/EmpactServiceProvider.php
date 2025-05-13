@@ -21,7 +21,7 @@ class EmpactServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/empact-web-monitor.php' => config_path('empact-web-monitor.php'),
-        ], 'config');
+        ], 'web-monitor-config');
     }
 
     public function register()
