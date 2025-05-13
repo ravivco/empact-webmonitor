@@ -2,18 +2,18 @@
 
 namespace Empact\WebMonitor\Drivers;
 
-use Empact\WebMonitor\Clients\AiClient;
-use Empact\WebMonitor\Transformers\AiTransformer;
+use Empact\WebMonitor\Clients\EmpactAiClient;
+use Empact\WebMonitor\Transformers\EmpactAiTransformer;
 use Illuminate\Support\Facades\Log;
 
-class AiMonitor implements DriverInterface
+class EmpactAiMonitor implements DriverInterface
 {
     /**
-     * @var Empact\WebMonitor\Clients\AiClient
+     * @var EmpactAiClient
      */
     protected $aiClient;
 
-    public function __construct(AiClient $aiClient)
+    public function __construct(EmpactAiClient $aiClient)
     {
         $this->aiClient = $aiClient;
     }
@@ -28,7 +28,7 @@ class AiMonitor implements DriverInterface
     public function search()
     {
         $results = $this->aiClient->getQuery();
-        return (new AiTransformer($results))->transform();
+        return (new EmpactAiTransformer($results))->transform();
     }
 
     public function getKeywords()

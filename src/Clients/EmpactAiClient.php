@@ -6,12 +6,11 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
-class AiClient extends BaseClient implements ClientInterface
+class EmpactAiClient extends BaseClient implements ClientInterface
 {
 
     protected $results_type_options = [
         'All' => 'RecentAll?',
-        'Brand' => 'Recent?',
         'Keywords' => 'GetKeywords?'
     ];
 
@@ -21,7 +20,7 @@ class AiClient extends BaseClient implements ClientInterface
      */
     protected $api_url;
 
-    public $allowed_query_params = ['keyword', 'start_index'];
+    public $allowed_query_params = ['keyword', 'start_index', 'dates'];
 
     public function __construct($token, Client $client)
     {
@@ -35,7 +34,7 @@ class AiClient extends BaseClient implements ClientInterface
      */
     public function getResultsType(): string
     {
-        $type = $this->getQueryParam('results_type') ?: 'All';
+        $type = $this->getQueryParam('results_type');
 
         return $this->results_type_options[$type];
     }
@@ -45,7 +44,7 @@ class AiClient extends BaseClient implements ClientInterface
      */
     public function getApiUrl(): string
     {
-        return config('empact-web-monitor.ai.api_endpoint');
+        return config('empact-web-monitor.empactai.api_endpoint');
     }
 
     public function getQuery()
@@ -62,9 +61,8 @@ class AiClient extends BaseClient implements ClientInterface
                 ],
                 'json' => [
                     'query_string' => [
-                        'conversation_details.post_date' => [
-                            'gte' => '2025-03-20T00:00:00Z',
-                            'lte' => '2025-05-05T23:59:59Z',
+                        'conversation_details.updated_at' => [
+                            'gte' => $this->getDate()
                         ]
                     ]
                 ]
@@ -107,7 +105,19 @@ class AiClient extends BaseClient implements ClientInterface
     {
         return http_build_query([
             'keyword' => $this->getQueryParam('keyword'),
-            'id' => $this->getQueryParam('start_index')
+            'id' => $this->getQueryParam('start_index'),
+            'dates' => $this->getQueryParam('dates')
         ]);
+    }
+
+    protected function getDate(){
+        $originalDate = $this->getQueryParam('dates');
+
+        $date = new \DateTime($originalDate);
+
+        $date->setTimezone(new \DateTimeZone('UTC'));
+
+        $formatted = $date->format('Y-m-d\TH:i:s\Z');
+
     }
 }
