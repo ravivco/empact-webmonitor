@@ -3,11 +3,11 @@
 namespace Empact\WebMonitor;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use Empact\WebMonitor\Clients\AiClient;
+use Empact\WebMonitor\Clients\EmpactAiClient;
 use Empact\WebMonitor\Clients\GoogleClient;
 use Empact\WebMonitor\Clients\TwitterClient;
 use Empact\WebMonitor\Clients\VigoClient;
-use Empact\WebMonitor\Drivers\AiMonitor;
+use Empact\WebMonitor\Drivers\EmpactAiMonitor;
 use Empact\WebMonitor\Drivers\BaseMonitor;
 use Empact\WebMonitor\Drivers\GoogleMonitor;
 use Empact\WebMonitor\Drivers\TwitterMonitor;
@@ -80,12 +80,12 @@ class EmpactServiceProvider extends ServiceProvider
     }
     protected function bindAiMonitor()
     {
-        return $this->app->bind(AiMonitor::class, function () {
-            $connection = new AiClient(
-                config('empact-web-monitor.empactai.bearer_token'),
+        return $this->app->bind(EmpactAiMonitor::class, function () {
+            $connection = new EmpactAiClient(
+                config('empact-web-monitor.empactai.api_token'),
                 new Client()
             );
-            return new AiMonitor($connection);
+            return new EmpactAiMonitor($connection);
         });
     }
 }

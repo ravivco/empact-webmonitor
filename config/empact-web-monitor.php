@@ -31,7 +31,7 @@ return [
     ],
     'empactai' => [
         'api_endpoint' => env('AI_API_ENDPOINT'),
-        'bearer_token' => env('AI_API_BEARER_TOKEN'),
+        'api_token' => env('AI_API_BEARER_TOKEN'),
         'interface' => [
             'search' => 'dates',
             'map' => 'self'

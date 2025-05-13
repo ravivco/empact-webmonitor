@@ -21,7 +21,7 @@ class BaseMonitor
         self::TWITTER => TwitterMonitor::class,
         self::GOOGLE => GoogleMonitor::class,
         self::VIGO => VigoMonitor::class,
-        self::EmpactAI => AiMonitor::class
+        self::EmpactAI => EmpactAiMonitor::class
     ];
 
     /**

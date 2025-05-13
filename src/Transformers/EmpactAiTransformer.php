@@ -4,7 +4,7 @@ namespace Empact\WebMonitor\Transformers;
 
 use Illuminate\Support\Facades\Log;
 
-class AiTransformer implements TransformerInterface
+class EmpactAiTransformer implements TransformerInterface
 {
     /**
      * @var array

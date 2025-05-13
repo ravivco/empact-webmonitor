@@ -6,7 +6,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
-class AiClient extends BaseClient implements ClientInterface
+class EmpactAiClient extends BaseClient implements ClientInterface
 {
 
     protected $results_type_options = [
