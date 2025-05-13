@@ -30,6 +30,7 @@ class AiTransformer implements TransformerInterface
             $source = $item['_source'] ?? [];
             $conversation = $source['conversation_details'] ?? [];
             $relationType = $source['relation_type'] ?? [];
+            $clientDetails = $source['client_details'] ?? [];
 
             $result[] = [
                 'api_id' => $item['_id'] ?? null,
@@ -41,8 +42,8 @@ class AiTransformer implements TransformerInterface
                 'date' => $conversation['post_date'] ?? null,
                 'query_text' => $this->generateQueryText($item),
                 'query_time' => '',
-                'api_brand_name' => $relationType['parent'] ?? null,
-                'api_brand_id' => ''
+                'api_brand_name' => $clientDetails['brand_name'] ?? null,
+                'api_brand_id' => $clientDetails['client_id'] ?? 116518,
             ];
         }
 

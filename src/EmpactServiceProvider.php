@@ -82,7 +82,7 @@ class EmpactServiceProvider extends ServiceProvider
     {
         return $this->app->bind(AiMonitor::class, function () {
             $connection = new AiClient(
-                config('empact-web-monitor.ai.bearer_token'),
+                config('empact-web-monitor.empactai.bearer_token'),
                 new Client()
             );
             return new AiMonitor($connection);

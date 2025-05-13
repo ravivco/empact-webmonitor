@@ -23,10 +23,18 @@ return [
             'Instagram' => 7, // Instagram
             'TB'        => 8, // Talk back
             'Youtube'   => 9, // Youtube
+        ],
+        'interface' => [
+            'search' => 'startingIndex',
+            'map' => 'db'
         ]
     ],
-    'ai' => [
+    'empactai' => [
         'api_endpoint' => env('AI_API_ENDPOINT'),
         'bearer_token' => env('AI_API_BEARER_TOKEN'),
+        'interface' => [
+            'search' => 'dates',
+            'map' => 'self'
+        ]
     ]
 ];
