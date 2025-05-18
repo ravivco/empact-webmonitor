@@ -2,9 +2,11 @@
 
 namespace Empact\WebMonitor\Clients;
 
+use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 
 class EmpactAiClient extends BaseClient implements ClientInterface
 {
@@ -20,12 +22,15 @@ class EmpactAiClient extends BaseClient implements ClientInterface
      */
     protected $api_url;
 
-    public $allowed_query_params = ['keyword', 'start_index', 'dates'];
+    /** @var string[] */
+    protected array $allowed_query_params = ['keyword', 'start_index', 'conversation_details.updated_at', 'conversation_id'];
+
+    /** @var array */
+    protected array $queryParams = [];
 
     public function __construct($token, Client $client)
     {
         $this->token = $token;
-
         $this->client = $client;
     }
 
@@ -39,12 +44,16 @@ class EmpactAiClient extends BaseClient implements ClientInterface
         return $this->results_type_options[$type];
     }
 
+    public function getProviderConfigByKey(string $key)
+    {
+        return config('empact-web-monitor.empactai')[$key];
+    }
     /**
      * @return string
      */
     public function getApiUrl(): string
     {
-        return config('empact-web-monitor.empactai.api_endpoint');
+        return $this->getProviderConfigByKey('api_endpoint');
     }
 
     public function getQuery()
@@ -53,19 +62,19 @@ class EmpactAiClient extends BaseClient implements ClientInterface
             throw new Exception("Please provide a valid bearer token");
         }
 
+        $params = $this->getQueryParams();
+
+        $payload = ['query_string' => $params];
+
+        Log::info($payload);
         try {
             $result = $this->client->post($this->getApiUrl(), [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->token,
                     'Accept' => 'application/json',
                 ],
-                'json' => [
-                    'query_string' => [
-                        'conversation_details.updated_at' => [
-                            'gte' => $this->getDate()
-                        ]
-                    ]
-                ]
+                'json' => $payload
+
             ]);
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
@@ -99,25 +108,5 @@ class EmpactAiClient extends BaseClient implements ClientInterface
                 ]
             ];
         }
-    }
-
-    protected function buildQuery()
-    {
-        return http_build_query([
-            'keyword' => $this->getQueryParam('keyword'),
-            'id' => $this->getQueryParam('start_index'),
-            'dates' => $this->getQueryParam('dates')
-        ]);
-    }
-
-    protected function getDate(){
-        $originalDate = $this->getQueryParam('dates');
-
-        $date = new \DateTime($originalDate);
-
-        $date->setTimezone(new \DateTimeZone('UTC'));
-
-        $formatted = $date->format('Y-m-d\TH:i:s\Z');
-
     }
 }

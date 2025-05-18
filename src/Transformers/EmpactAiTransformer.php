@@ -33,7 +33,7 @@ class EmpactAiTransformer implements TransformerInterface
             $clientDetails = $source['client_details'] ?? [];
 
             $result[] = [
-                'api_id' => $item['_id'] ?? null,
+                'api_id' => $source['conversation_id'] ?? null,
                 'media' => $conversation['platform'] ?? null,
                 'url' => $conversation['related_url'] ?? null,
                 'title' => $conversation['title'] ?? null,
@@ -43,7 +43,7 @@ class EmpactAiTransformer implements TransformerInterface
                 'query_text' => $this->generateQueryText($item),
                 'query_time' => '',
                 'api_brand_name' => $clientDetails['brand_name'] ?? null,
-                'api_brand_id' => $clientDetails['client_id'] ?? 116518,
+                'api_brand_id' => $clientDetails['brand_id'] ?? null,
             ];
         }
 
