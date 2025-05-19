@@ -44,12 +44,23 @@ class EmpactAiTransformer implements TransformerInterface
                 'query_time' => '',
                 'api_brand_name' => $clientDetails['brand_name'] ?? null,
                 'api_brand_id' => $clientDetails['brand_id'] ?? null,
+                'rate' => $this->handleSentiment($conversation['sentiment'])
             ];
         }
 
         return $result;
     }
 
+    protected function handleSentiment(string $sentiment): int
+    {
+        $mapping = [
+            'positive' => 1,
+            'neutral'  => 2,
+            'negative' => 3
+        ];
+
+        return $mapping[$sentiment] ?? 0;
+    }
 
     protected function generateQueryText(array $item)
     {
