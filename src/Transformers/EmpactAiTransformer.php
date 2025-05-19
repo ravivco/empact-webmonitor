@@ -27,11 +27,14 @@ class EmpactAiTransformer implements TransformerInterface
         $hits = $this->collection['hits']['hits'] ?? [];
 
         foreach ($hits as $item) {
+
             $source = $item['_source'] ?? [];
             $conversation = $source['conversation_details'] ?? [];
-            $relationType = $source['relation_type'] ?? [];
             $clientDetails = $source['client_details'] ?? [];
-
+            if (empty($conversation)) {
+                Log::info("No conversation_details for item: ". $item);
+                continue;
+            }
             $result[] = [
                 'api_id' => $source['conversation_id'] ?? null,
                 'media' => $conversation['platform'] ?? null,
@@ -44,14 +47,15 @@ class EmpactAiTransformer implements TransformerInterface
                 'query_time' => '',
                 'api_brand_name' => $clientDetails['brand_name'] ?? null,
                 'api_brand_id' => $clientDetails['brand_id'] ?? null,
-                'rate' => $this->handleSentiment($conversation['sentiment'])
+                'rate' => $this->handleSentiment($conversation['sentiment'] ?? null) ?? 0,
+                'discussion_topics' => $conversation['discussion_topics'] ?? [],
             ];
         }
 
         return $result;
     }
 
-    protected function handleSentiment(string $sentiment): int
+    protected function handleSentiment(?string $sentiment): int
     {
         $mapping = [
             'positive' => 1,
