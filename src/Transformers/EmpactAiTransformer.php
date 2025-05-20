@@ -32,7 +32,7 @@ class EmpactAiTransformer implements TransformerInterface
             $conversation = $source['conversation_details'] ?? [];
             $clientDetails = $source['client_details'] ?? [];
             if (empty($conversation)) {
-                Log::info("No conversation_details for item: ". $item);
+                Log::info(["No conversation_details for item: ", $item]);
                 continue;
             }
             $result[] = [
