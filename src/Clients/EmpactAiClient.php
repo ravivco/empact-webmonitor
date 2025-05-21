@@ -5,7 +5,6 @@ namespace Empact\WebMonitor\Clients;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 
 class EmpactAiClient extends BaseClient implements ClientInterface
@@ -23,7 +22,7 @@ class EmpactAiClient extends BaseClient implements ClientInterface
     protected $api_url;
 
     /** @var string[] */
-    protected array $allowed_query_params = ['keyword', 'start_index', 'conversation_details.updated_at', 'conversation_id'];
+    protected array $allowed_query_params = ['keyword', 'start_index', 'conversation_details.updated_at', 'conversation_id', 'client_details.brand_id'];
 
     /** @var array */
     protected array $queryParams = [];
@@ -65,7 +64,6 @@ class EmpactAiClient extends BaseClient implements ClientInterface
         $params = $this->getQueryParams();
 
         $payload = ['query_string' => $params];
-
         try {
             $result = $this->client->post($this->getApiUrl(), [
                 'headers' => [
