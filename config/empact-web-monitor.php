@@ -33,7 +33,11 @@ return [
         'api_endpoint' => env('AI_API_ENDPOINT'),
         'api_token' => env('AI_API_BEARER_TOKEN'),
         'interface' => [
-            'search' => 'dates',
+            'search' => [
+                'byDate' => ['key' => 'conversation_details.updated_at', 'condition' => 'gte'],
+                'byBrand' => ['key' => 'client_details.brand_id', 'condition' => null],
+                'byApiItemId' => ['key' => 'conversation_id', 'condition' => 'gte']
+            ],
             'map' => 'self'
         ]
     ]
