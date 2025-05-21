@@ -66,7 +66,6 @@ class EmpactAiClient extends BaseClient implements ClientInterface
 
         $payload = ['query_string' => $params];
 
-        Log::info($payload);
         try {
             $result = $this->client->post($this->getApiUrl(), [
                 'headers' => [

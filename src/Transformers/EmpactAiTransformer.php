@@ -55,6 +55,26 @@ class EmpactAiTransformer implements TransformerInterface
         return $result;
     }
 
+
+    /**
+     * @param array $item
+     * @return string|null
+     */
+    protected function generateQueryText(array $item)
+    {
+        $keywords = $item['_source']['conversation_details']['keywords'] ?? [];
+
+        if (!empty($keywords)) {
+            return implode(', ', $keywords);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string|null $sentiment
+     * @return int
+     */
     protected function handleSentiment(?string $sentiment): int
     {
         $mapping = [
@@ -64,17 +84,6 @@ class EmpactAiTransformer implements TransformerInterface
         ];
 
         return $mapping[$sentiment] ?? 0;
-    }
-
-    protected function generateQueryText(array $item)
-    {
-        $keywords = $item['_source']['conversation_details']['keywords'] ?? [];
-
-        if (!empty($keywords)) {
-            return implode(', ', $keywords);
-        }
-
-        return $item['keyword'] ?? ($item['highlights'] ?? null);
     }
 
 }
