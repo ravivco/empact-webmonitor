@@ -34,9 +34,9 @@ return [
         'api_token' => env('AI_API_BEARER_TOKEN'),
         'interface' => [
             'search' => [
-                'byDate' => ['key' => 'conversation_details.updated_at', 'condition' => 'gte'],
-                'byBrand' => ['key' => 'client_details.brand_id', 'condition' => null],
-                'byApiItemId' => ['key' => 'conversation_id', 'condition' => 'gte']
+                'byDate' => ['key' => 'conversation_details.updated_at', 'condition' => 'gte', 'active' => true],
+                'byBrand' => ['key' => 'client_details.brand_id', 'condition' => null, 'active' => false],
+                'byApiItemId' => ['key' => 'conversation_id', 'condition' => 'gte', 'active' => false],
             ],
             'map' => 'self'
         ]
