@@ -35,7 +35,7 @@ return [
         'interface' => [
             'search' => [
                 'byDate' => ['key' => 'conversation_details.updated_at', 'condition' => 'gte', 'active' => true],
-                'byBrand' => ['key' => 'client_details.brand_id', 'condition' => null, 'active' => false],
+                'byBrand' => ['key' => 'client_details.brand_id', 'condition' => null, 'active' => true],
                 'byApiItemId' => ['key' => 'conversation_id', 'condition' => 'gte', 'active' => false],
             ],
             'map' => 'self'
