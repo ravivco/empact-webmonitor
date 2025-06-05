@@ -2,7 +2,7 @@
     "name": "empact/empact-web-monitor",
     "description": "A web monitoring package",
     "require": {
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.0",
         "abraham/twitteroauth": "^3.0"
     },
     "autoload": {
