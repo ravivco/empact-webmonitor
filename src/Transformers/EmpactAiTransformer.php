@@ -49,6 +49,7 @@ class EmpactAiTransformer implements TransformerInterface
                 'api_brand_id' => $clientDetails['brand_id'] ?? null,
                 'rate' => $this->handleSentiment($conversation['sentiment'] ?? null) ?? 0,
                 'discussion_topics' => $conversation['discussion_topics'] ?? [],
+                'link_image' => $conversation['related_file'] ?? null,
             ];
         }
 
