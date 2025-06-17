@@ -40,7 +40,7 @@ class EmpactAiTransformer implements TransformerInterface
                 'media' => $conversation['platform'] ?? null,
                 'url' => $conversation['related_url'] ?? null,
                 'title' => $conversation['title'] ?? null,
-                'body' => $conversation['body'] ?? null,
+                'body' => $conversation['redable_text'] ?? $conversation['body'] ?? null,
                 'author' => null,
                 'date' => $conversation['post_date'] ?? null,
                 'query_text' => $this->generateQueryText($item),
