@@ -40,7 +40,7 @@ class EmpactAiTransformer implements TransformerInterface
                 'media' => $conversation['platform'] ?? null,
                 'url' => $conversation['related_url'] ?? null,
                 'title' => $conversation['title'] ?? null,
-                'body' => $conversation['readable_text'] ?? $conversation['body'] ?? null,
+                'body' => $this->handleBody($conversation['readable_text']) ?? $this->handleBody($conversation['body']) ?? null,
                 'author' => null,
                 'date' => $conversation['post_date'] ?? null,
                 'query_text' => $this->generateQueryText($item),
@@ -56,6 +56,17 @@ class EmpactAiTransformer implements TransformerInterface
         return $result;
     }
 
+    /**
+     * @param mixed $input
+     * @return string
+     */
+    protected function handleBody($input): string
+    {
+        if (is_array($input)) {
+            return implode("\n", $input);
+        }
+        return $input;
+    }
 
     /**
      * @param array $item
