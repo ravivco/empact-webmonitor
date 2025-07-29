@@ -59,14 +59,16 @@ class VigoClient extends BaseClient implements ClientInterface
 
         try {
             $result = $this->client->get($this->getApiUrl() . $this->buildQuery());
-            if ($this->isErrorResult($result)) {
+            $result_data = json_decode($result->getBody(), true);
+            // Check if the given response array has error.
+            if ($this->resultHasError($result_data)) {
                 return [
                     'error' => [
-                        'message' => json_decode($result->getBody(), true)['error'] ?? null,
+                        'message' => $result_data['error'] ?? null,
                     ],
                 ];
             }
-            return json_decode($result->getBody(), true);
+            return $result_data;
         } catch (Exception $e) {
             $response = $e->getResponse();
 
@@ -105,17 +107,13 @@ class VigoClient extends BaseClient implements ClientInterface
     }
 
     /**
-     * Check if the response has an error message in it.
-     * */
-    private function isErrorResult($results): bool
+     * Checks if the given response array contains an error key.
+     *
+     * @param array $response The response array to check for errors.
+     * @return bool Returns true if the 'error' key exists in the response array, otherwise false.
+     */
+    private function resultHasError(array $response): bool
     {
-        $decodedResults = json_decode($results->getBody(), true);
-
-        foreach ($decodedResults as $result) {
-            if (is_array($result) && array_key_exists('error', $result)) {
-                return true;
-            }
-        }
-        return false;
+        return array_key_exists('error', $response);
     }
 }
