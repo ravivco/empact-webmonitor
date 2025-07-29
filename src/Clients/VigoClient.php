@@ -59,6 +59,13 @@ class VigoClient extends BaseClient implements ClientInterface
 
         try {
             $result = $this->client->get($this->getApiUrl() . $this->buildQuery());
+            if ($this->isErrorResult($result)) {
+                return [
+                    'error' => [
+                        'message' => json_decode($result->getBody(), true)['error'] ?? null,
+                    ],
+                ];
+            }
             return json_decode($result->getBody(), true);
         } catch (Exception $e) {
             $response = $e->getResponse();
@@ -95,5 +102,20 @@ class VigoClient extends BaseClient implements ClientInterface
             'keyword' => $this->getQueryParam('keyword'),
             'id' => $this->getQueryParam('start_index')
         ]);
+    }
+
+    /**
+     * Check if the response has an error message in it.
+     * */
+    private function isErrorResult($results): bool
+    {
+        $decodedResults = json_decode($results->getBody(), true);
+
+        foreach ($decodedResults as $result) {
+            if (is_array($result) && array_key_exists('error', $result)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
