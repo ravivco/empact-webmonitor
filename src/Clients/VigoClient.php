@@ -62,7 +62,7 @@ class VigoClient extends BaseClient implements ClientInterface
             if ($this->isErrorResult($result)) {
                 return [
                     'error' => [
-                        'message' => json_decode($result->getBody(), true)['vigo']['error'] ?? null,
+                        'message' => json_decode($result->getBody(), true)['error'] ?? null,
                     ],
                 ];
             }
