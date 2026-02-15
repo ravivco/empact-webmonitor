@@ -30,7 +30,7 @@ class EmpactAiTransformer implements TransformerInterface
 
             $source = $item['_source'] ?? [];
             $conversation = $source['conversation_details'] ?? [];
-            $clientDetails = $source['client_details'] ?? [];
+            //$clientDetails = $source['client_details'] ?? []; // depracated on last MikMik version
             if (empty($conversation)) {
                 Log::info(["No conversation_details for item: ", $item]);
                 continue;
@@ -45,8 +45,7 @@ class EmpactAiTransformer implements TransformerInterface
                 'date' => $conversation['post_date'] ?? null,
                 'query_text' => $this->generateQueryText($item),
                 'query_time' => '',
-                'api_brand_name' => $clientDetails['brand_name'] ?? null,
-                'api_brand_id' => $clientDetails['brand_id'] ?? null,
+                'api_brand_id' => $source['client_id'] ?? null,
                 'rate' => $this->handleSentiment($conversation['sentiment'] ?? null) ?? 0,
                 'discussion_topics' => $conversation['discussion_topics'] ?? [],
                 'link_image' => $conversation['related_file'] ?? null,
