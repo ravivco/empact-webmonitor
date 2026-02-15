@@ -1,13 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DevTeam5
- * Date: 2020-02-10
- * Time: 03:21
- */
 
 namespace Empact\WebMonitor\Clients;
 
+
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 
 class BaseClient
 {
@@ -81,5 +78,61 @@ class BaseClient
     public function init(array $query)
     {
         $this->setQueryParams($this->extractQueryParams($query));
+    }
+
+    /**
+     * Handle Guzzle HTTP exceptions and return a structured error response
+     *
+     * @param \Throwable $e The exception thrown during the HTTP request
+     * @param string $context Context identifier for logging (e.g., 'EmpactAi', 'Vigo')
+     * @param string|null $url Optional URL for logging context
+     * @return array Structured error response
+     */
+    protected function handleHttpException(\Throwable $e, string $context, ?string $url = null): array
+    {
+        $logContext = ['message' => $e->getMessage()];
+
+        if ($url) {
+            $logContext['url'] = $url;
+        }
+
+        if ($e instanceof ConnectException) {
+            // No HTTP response exists (network/timeout errors)
+            $logContext['handler_context'] = $e->getHandlerContext();
+            logger()->error("{$context} ConnectException", $logContext);
+
+            return [
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => 0,
+                ],
+            ];
+        }
+
+        if ($e instanceof RequestException) {
+            // Might have HTTP response (4xx/5xx errors)
+            $response = $e->getResponse();
+            $logContext['status'] = $response?->getStatusCode();
+            $logContext['body'] = $response ? (string) $response->getBody() : null;
+
+            logger()->error("{$context} RequestException", $logContext);
+
+            return [
+                'error' => [
+                    'message' => $response ? (string) $response->getBody() : $e->getMessage(),
+                    'code' => $response?->getStatusCode() ?? 0,
+                ],
+            ];
+        }
+
+        // Unexpected errors
+        logger()->error("{$context} Unexpected error", $logContext);
+
+        return [
+            'error' => [
+                'message' => $e->getMessage(),
+                'code' => 0,
+            ],
+        ];
     }
 }

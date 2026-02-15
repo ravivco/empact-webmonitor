@@ -25,25 +25,47 @@ class TwitterClient extends BaseClient implements ClientInterface
     {
         $this->ensureConfigValuesArePresent();
 
-        $result = $this->twitterOAuth->get('/search/tweets', $this->buildQuery());
+        try {
+            $result = $this->twitterOAuth->get('/search/tweets', $this->buildQuery());
 
-        $statusCode = $this->twitterOAuth->getLastHttpCode();
+            $statusCode = $this->twitterOAuth->getLastHttpCode();
 
-        if ($statusCode == self::SUCCESS) {
-            return $result;
-        }
+            if ($statusCode == self::SUCCESS) {
+                return $result;
+            }
 
-        if ($statusCode !== self::SUCCESS) {
-            $message = $this->twitterOAuth->getLastBody()->errors[0]->message;
+            // Handle non-success status codes
+            $errorMessage = 'Unknown error occurred';
+            $lastBody = $this->twitterOAuth->getLastBody();
+
+            if (isset($lastBody->errors[0]->message)) {
+                $errorMessage = $lastBody->errors[0]->message;
+            }
+
+            logger()->error('Twitter API error', [
+                'status_code' => $statusCode,
+                'message' => $errorMessage,
+                'body' => $lastBody,
+            ]);
+
             return [
                 'error' => [
-                    'message' => $message,
+                    'message' => $errorMessage,
                     'code' => $statusCode
                 ]
             ];
-        }
+        } catch (\Throwable $e) {
+            logger()->error('Twitter Unexpected error', [
+                'message' => $e->getMessage(),
+            ]);
 
-        return $result;
+            return [
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => 0,
+                ],
+            ];
+        }
     }
 
     protected function ensureConfigValuesArePresent()
