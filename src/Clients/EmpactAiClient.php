@@ -74,20 +74,8 @@ class EmpactAiClient extends BaseClient implements ClientInterface
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ],
-            'json' => $payload,
-            'connect_timeout' => 5,   // seconds to establish TCP/TLS
-            'timeout' => 20,          // total request time
+            'json' => $payload
         ];
-
-        // Safe debug info (don’t log the real token)
-        logger()->info('EmpactAiClient request', [
-            'url' => $url,
-            'payload' => $payload,
-            'timeouts' => [
-                'connect_timeout' => $options['connect_timeout'],
-                'timeout' => $options['timeout'],
-            ]
-        ]);
 
         try {
             $result = $this->client->post($url, $options);
@@ -104,9 +92,7 @@ class EmpactAiClient extends BaseClient implements ClientInterface
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->token,
                     'Accept' => 'application/json',
-                ],
-                'connect_timeout' => 5,
-                'timeout' => 20,
+                ]
             ]);
             return json_decode($result->getBody(), true);
         } catch (\Throwable $e) {
