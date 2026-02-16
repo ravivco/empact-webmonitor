@@ -59,14 +59,8 @@ class GoogleClient extends BaseClient implements ClientInterface
                 $result = $this->client->get($this->api_url . $this->buildQuery());
                 $body = json_decode($result->getBody(), true);
                 array_push($results, $body['items']);
-            } catch (Exception $e) {
-                $response = $e->getResponse();
-                return [
-                    'error' => [
-                        'message' => $response->getReasonPhrase(),
-                        'code' => $response->getStatusCode()
-                    ]
-                ];
+            } catch (\Throwable $e) {
+                return $this->handleHttpException($e, 'Google', $url);
             }
         }
 

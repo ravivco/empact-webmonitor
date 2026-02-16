@@ -4,6 +4,8 @@ namespace Empact\WebMonitor\Clients;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 
 class VigoClient extends BaseClient implements ClientInterface
 {
@@ -65,19 +67,14 @@ class VigoClient extends BaseClient implements ClientInterface
                 return [
                     'error' => [
                         'message' => $result_data['error'] ?? null,
+                        'code' => $result->getStatusCode()
                     ],
                 ];
             }
-            return $result_data;
-        } catch (Exception $e) {
-            $response = $e->getResponse();
 
-            return [
-                'error' => [
-                    'message' => $response->getReasonPhrase(),
-                    'code' => $response->getStatusCode()
-                ]
-            ];
+            return $result_data;
+        } catch (\Throwable $e) {
+            return $this->handleHttpException($e, 'Vigo', $url);
         }
     }
 
@@ -86,24 +83,20 @@ class VigoClient extends BaseClient implements ClientInterface
         try {
             $result = $this->client->get($this->getApiUrl() . $this->buildQuery());
             return json_decode($result->getBody(), true);
-        } catch (Exception $e) {
-            $response = $e->getResponse();
-            return [
-                'error' => [
-                    'message' => $response->getReasonPhrase(),
-                    'code' => $response->getStatusCode()
-                ]
-            ];
+        } catch (\Throwable $e) {
+            return $this->handleHttpException($e, 'Vigo', $url);
         }
     }
 
     protected function buildQuery()
     {
-        return http_build_query([
+        $query = [
             'c2r' => $this->getQueryParam('c2r') ?: $this->token,
             'keyword' => $this->getQueryParam('keyword'),
-            'id' => $this->getQueryParam('start_index')
-        ]);
+            'id' => $this->getQueryParam('start_index'),
+        ];
+
+        return http_build_query(array_filter($query, fn($v) => $v !== null && $v !== ''));
     }
 
     /**

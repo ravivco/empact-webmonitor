@@ -5,6 +5,8 @@ namespace Empact\WebMonitor\Clients;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Arr;
 
 class EmpactAiClient extends BaseClient implements ClientInterface
@@ -62,27 +64,24 @@ class EmpactAiClient extends BaseClient implements ClientInterface
         }
 
         $params = $this->getQueryParams();
-
         $payload = ['query_string' => $params];
+
+        $url = $this->getApiUrl();
+
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->token,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $payload
+        ];
+
         try {
-            $result = $this->client->post($this->getApiUrl(), [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->token,
-                    'Accept' => 'application/json',
-                ],
-                'json' => $payload
-
-            ]);
+            $result = $this->client->post($url, $options);
             return json_decode($result->getBody(), true);
-        } catch (Exception $e) {
-            $response = $e->getResponse();
-
-            return [
-                'error' => [
-                    'message' => $response->getReasonPhrase(),
-                    'code' => $response->getStatusCode()
-                ]
-            ];
+        } catch (\Throwable $e) {
+            return $this->handleHttpException($e, 'EmpactAi', $url);
         }
     }
 
@@ -96,14 +95,8 @@ class EmpactAiClient extends BaseClient implements ClientInterface
                 ]
             ]);
             return json_decode($result->getBody(), true);
-        } catch (Exception $e) {
-            $response = $e->getResponse();
-            return [
-                'error' => [
-                    'message' => $response->getReasonPhrase(),
-                    'code' => $response->getStatusCode()
-                ]
-            ];
+        } catch (\Throwable $e) {
+            return $this->handleHttpException($e, 'EmpactAi', $url);
         }
     }
 }
