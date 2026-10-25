@@ -74,7 +74,7 @@ class TwitterClient extends BaseClient implements ClientInterface
 
         foreach ($configAttributes as $key => $item) {
             if (is_null($item)) {
-                throw new Exception("Provide a ${key} key");
+                throw new Exception("Provide a {$key} key");
             }
         }
         return;
